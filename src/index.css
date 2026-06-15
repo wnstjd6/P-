@@ -1,10 +1,30 @@
 @import "tailwindcss";
 
-/* Tailwind preflight이 기본 리셋을 처리하므로 * { margin:0 } 제거 */
+:root {
+  --cream: #fffbf5;
+  --cream-dark: #fff3e4;
+  --amber-deep: #78350f;
+  --amber-mid: #b45309;
+  --coral: #ea580c;
+  --coral-light: #fb923c;
+  --mint: #059669;
+  --chili: #dc2626;
+  --ink: #292524;
+  --ink-muted: #78716c;
+  --glass: rgba(255, 255, 255, 0.72);
+  --shadow-soft: 0 4px 24px rgba(120, 53, 15, 0.08);
+  --shadow-lift: 0 16px 48px rgba(234, 88, 12, 0.14);
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
-  font-family: "Pretendard", "Noto Sans KR", system-ui, -apple-system, sans-serif;
+  font-family: "Pretendard Variable", Pretendard, "Noto Sans KR", system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
-  background-color: #fff9f0;
+  background-color: var(--cream);
+  color: var(--ink);
   min-height: 100vh;
 }
 
@@ -12,48 +32,168 @@ body {
   min-height: 100vh;
 }
 
-/* 아코디언 슬라이드 */
+/* 배경 패턴 */
+.bg-kitchen {
+  background-color: var(--cream);
+  background-image:
+    radial-gradient(circle at 20% 10%, rgba(251, 191, 36, 0.12) 0%, transparent 40%),
+    radial-gradient(circle at 80% 80%, rgba(249, 115, 22, 0.08) 0%, transparent 45%),
+    radial-gradient(circle, rgba(180, 83, 9, 0.04) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 24px 24px;
+}
+
+/* 애니메이션 */
 @keyframes slideDown {
-  from { opacity: 0; transform: translateY(-8px); }
+  from { opacity: 0; transform: translateY(-10px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* 히어로 페이드업 */
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(16px); }
+  from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* 배경 이모지 float */
 @keyframes float {
-  0%, 100% { transform: translateY(0) rotate(-1deg); }
-  50%       { transform: translateY(-6px) rotate(1deg); }
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50%       { transform: translateY(-8px) rotate(2deg); }
 }
 
-.animate-slide-down { animation: slideDown 0.25s ease-out forwards; }
-.animate-fade-up    { animation: fadeUp 0.4s ease-out forwards; }
-.animate-float      { animation: float 3s ease-in-out infinite; }
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
 
-/* 포스트잇 그림자 */
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(16px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes flipIn {
+  from { opacity: 0; transform: rotateY(-8deg) scale(0.97); }
+  to   { opacity: 1; transform: rotateY(0) scale(1); }
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(12px) scale(0.95); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes progressPulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.7; }
+}
+
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.animate-slide-down { animation: slideDown 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+.animate-fade-up    { animation: fadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+.animate-float      { animation: float 4s ease-in-out infinite; }
+.animate-card-in    { animation: cardIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+.animate-flip-in    { animation: flipIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+.animate-toast      { animation: toastIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+
+.text-shimmer {
+  background: linear-gradient(90deg, var(--coral) 0%, var(--coral-light) 50%, var(--coral) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 4s linear infinite;
+}
+
+/* 플래시카드 3D — hover transform은 .flip-scene에만 적용 (자식 transform과 충돌 방지) */
+.flip-scene {
+  perspective: 1200px;
+  transition: transform 0.25s ease, filter 0.25s ease;
+}
+
+.flip-scene:not(.is-flipped):hover {
+  transform: translateY(-5px);
+}
+
+.flip-scene.is-flipped {
+  z-index: 10;
+  position: relative;
+}
+
+.flip-card {
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  transform-style: preserve-3d;
+}
+
+.flip-card.is-flipped {
+  transform: rotateY(180deg);
+}
+
+.flip-face {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transition: box-shadow 0.25s ease;
+}
+
+.flip-scene:not(.is-flipped):hover .flip-face {
+  box-shadow: var(--shadow-lift);
+}
+
+.flip-back {
+  transform: rotateY(180deg);
+}
+
+/* 포스트잇 */
 .postit-shadow {
-  box-shadow: 2px 2px 0 #d4a017, 4px 4px 10px rgba(0,0,0,0.1);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.postit-shadow:hover {
-  box-shadow: 2px 2px 0 #c49010, 6px 10px 20px rgba(0,0,0,0.16);
-  transform: translateY(-3px) rotate(0deg) !important;
+  box-shadow:
+    1px 1px 0 rgba(180, 83, 9, 0.25),
+    3px 3px 0 rgba(180, 83, 9, 0.12),
+    6px 8px 20px rgba(0, 0, 0, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-/* 카드 hover 리프트 */
-.card-lift {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+.postit-shadow:hover {
+  box-shadow:
+    1px 1px 0 rgba(180, 83, 9, 0.3),
+    4px 4px 0 rgba(180, 83, 9, 0.15),
+    10px 16px 28px rgba(0, 0, 0, 0.12);
+  transform: translateY(-4px) rotate(0deg) !important;
+  z-index: 2;
 }
+
+/* 카드 리프트 (3D flip 카드 내부에서는 사용 금지) */
+.card-lift {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
 .card-lift:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(245,158,11,0.15);
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lift);
+}
+
+.flip-scene .card-lift:hover {
+  transform: none;
+}
+
+/* 글래스 */
+.glass-panel {
+  background: var(--glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(251, 191, 36, 0.2);
+}
+
+/* 진행률 링 */
+.progress-ring {
+  transform: rotate(-90deg);
 }
 
 /* 스크롤바 */
-::-webkit-scrollbar       { width: 6px; }
-::-webkit-scrollbar-track { background: #fff9f0; }
-::-webkit-scrollbar-thumb { background: #fbbf24; border-radius: 999px; }
+::-webkit-scrollbar       { width: 7px; }
+::-webkit-scrollbar-track { background: var(--cream); }
+::-webkit-scrollbar-thumb { background: linear-gradient(var(--coral-light), var(--coral)); border-radius: 999px; }
+
+/* 포커스 */
+:focus-visible {
+  outline: 2px solid var(--coral-light);
+  outline-offset: 2px;
+}
