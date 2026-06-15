@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+/* Tailwind preflight이 기본 리셋을 처리하므로 * { margin:0 } 제거 */
+body {
+  font-family: "Pretendard", "Noto Sans KR", system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background-color: #fff9f0;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* 아코디언 슬라이드 */
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* 히어로 페이드업 */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* 배경 이모지 float */
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(-1deg); }
+  50%       { transform: translateY(-6px) rotate(1deg); }
+}
+
+.animate-slide-down { animation: slideDown 0.25s ease-out forwards; }
+.animate-fade-up    { animation: fadeUp 0.4s ease-out forwards; }
+.animate-float      { animation: float 3s ease-in-out infinite; }
+
+/* 포스트잇 그림자 */
+.postit-shadow {
+  box-shadow: 2px 2px 0 #d4a017, 4px 4px 10px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.postit-shadow:hover {
+  box-shadow: 2px 2px 0 #c49010, 6px 10px 20px rgba(0,0,0,0.16);
+  transform: translateY(-3px) rotate(0deg) !important;
+}
+
+/* 카드 hover 리프트 */
+.card-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(245,158,11,0.15);
+}
+
+/* 스크롤바 */
+::-webkit-scrollbar       { width: 6px; }
+::-webkit-scrollbar-track { background: #fff9f0; }
+::-webkit-scrollbar-thumb { background: #fbbf24; border-radius: 999px; }
